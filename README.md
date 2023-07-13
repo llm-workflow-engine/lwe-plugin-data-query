@@ -50,8 +50,8 @@ From a running LWE shell:
 
 ```
 /data-query load test.csv
-/data-query unload
 /data-query Find users with last name "Smith".
+/data-query unload
 ```
 
 ## Caveats
