@@ -129,6 +129,9 @@ class DataLoader:
             return False, None, f"Error loading XML file: {e}"
 
 class DataQuery(Plugin):
+    """
+    Send natural language commands to a loaded file of structured data
+    """
 
     def incompatible_backends(self):
         return [
