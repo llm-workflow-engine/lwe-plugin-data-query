@@ -133,11 +133,6 @@ class DataQuery(Plugin):
     Send natural language commands to a loaded file of structured data
     """
 
-    def incompatible_backends(self):
-        return [
-            'browser',
-        ]
-
     def default_config(self):
         return {
             'agent': {
