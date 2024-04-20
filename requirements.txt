@@ -1,4 +1,0 @@
-langchain
-openpyxl
-prompt-toolkit
-PyYAML
