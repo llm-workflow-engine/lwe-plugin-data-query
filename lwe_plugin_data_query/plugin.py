@@ -7,9 +7,9 @@ import openpyxl
 import xml.etree.ElementTree as ET
 from prompt_toolkit.completion import PathCompleter
 
-from langchain.agents import create_json_agent
-from langchain.agents.agent_toolkits import JsonToolkit
-from langchain.tools.json.tool import JsonSpec
+from langchain_community.agent_toolkits.json.base import create_json_agent
+from langchain_community.agent_toolkits.json.toolkit import JsonToolkit
+from langchain_community.tools.json.tool import JsonSpec
 
 from lwe.core.plugin import Plugin
 from lwe.core.config import Config
@@ -17,9 +17,9 @@ from lwe.core.logger import Logger
 import lwe.core.util as util
 
 class DataLoader:
-    def __init__(self, config):
-        self.config = config or Config()
-        self.log = Logger(self.__class__.__name__, self.config)
+    def __init__(self, config=None, cache_manager=None):
+        self.config = config
+        self.cache_manager = cache_manager
         self.data = None
 
     def load(self, filepath):
@@ -143,7 +143,7 @@ class DataQuery(Plugin):
     def setup(self):
         self.log.info(f"Setting up data query plugin, running with backend: {self.backend.name}")
         self.agent_verbose = self.config.get('plugins.data_query.agent.verbose')
-        self.data_loader = DataLoader(self.config)
+        self.data_loader = DataLoader(self.config, cache_manager=self.cache_manager)
 
     def get_shell_completions(self, _base_shell_completions):
         commands = {}
@@ -225,7 +225,7 @@ class DataQuery(Plugin):
         if not self.agent:
             return False, None, "No file loaded"
         try:
-            result = self.agent.run(arg)
+            result = self.agent.invoke(arg)
         except ValueError as e:
             return False, arg, e
         return True, arg, result
